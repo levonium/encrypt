@@ -5,7 +5,7 @@
     e.preventDefault()
 
     const wrapper = form.querySelector('#encrypted')
-    wrapper.innerText = 'working ...'
+    wrapper.innerText = 'encrypting ...'
 
     const { content, pass } = getContents()
 
@@ -17,6 +17,8 @@
 
     wrapper.innerText = encrypted
     wrapper.classList.remove('hidden')
+
+    wrapper.addEventListener('click', () => copyToClipboard(wrapper, encrypted))
   })
 
   form.querySelector('#Decrypt').addEventListener('click', async (e) => {
@@ -24,7 +26,7 @@
 
     const wrapper = form.querySelector('#decrypted')
     wrapper.classList.remove('error')
-    wrapper.innerText = 'working ...'
+    wrapper.innerText = 'decrypting ...'
 
     const { content, pass } = getContents()
 
@@ -32,15 +34,16 @@
       return
     }
 
-
     try {
       const decrypted = await decryptContent(content, pass)
 
       wrapper.innerText = decrypted
 
+      wrapper.addEventListener('click', () => copyToClipboard(wrapper, decrypted))
+
     } catch (error) {
 
-      wrapper.innerText = 'Something went wrong, please make sure to use your previously encrypted text and its correct passphrase.'
+      wrapper.innerText = 'Something went wrong, please make sure to use your previously encrypted text and the correct passphrase.'
       wrapper.classList.add('error')
 
       console.log(error)
@@ -64,6 +67,13 @@
     passInput.classList[pass ? 'remove' : 'add']('error')
 
     return { content, pass }
+  }
+
+  const copyToClipboard = async (wrapper, text) => {
+    await navigator.clipboard.writeText(text)
+
+    wrapper.classList.add('copied')
+    setTimeout(() => wrapper.classList.remove('copied'), 1500)
   }
 
   /**
