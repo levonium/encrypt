@@ -26,13 +26,37 @@ input {
   margin-top: 2rem;
 }
 .wrap {
+  position: relative;
   margin-top: 1rem;
   padding: 1rem;
   border: 1px solid var(--focus);
   border-radius: 0.5rem;
 }
 .wrap:not(.error) {
+  padding: 2rem 1rem 1rem;
   word-break: break-all;
+}
+.wrap::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--background);
+  background-color: var(--focus);
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+.wrap.encrypted:not(.error)::before {
+  content: 'ENCRYPTED CONTENT (Click to copy)';
+}
+.wrap.decrypted:not(.error)::before {
+  content: 'DECRYPTED CONTENT (Click to copy)';
+}
+.wrap.encrypted.copied:not(.error)::before,
+.wrap.decrypted.copied:not(.error)::before {
+  content: 'COPIED TO CLIPBOARD';
 }
 textarea.error,
 input.error,
