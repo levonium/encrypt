@@ -1,0 +1,41 @@
+.wrapper {
+  max-width: 600px;
+  margin: auto;
+  padding: 2rem;
+}
+.wrapper * {
+  box-sizing: border-box;
+}
+.block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+label {
+  display: block;
+  margin-top: 2rem;
+}
+textarea,
+input {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid var(--background);
+}
+.buttons {
+  margin-top: 2rem;
+}
+.wrap {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--focus);
+  border-radius: 0.5rem;
+}
+.wrap:not(.error) {
+  word-break: break-all;
+}
+textarea.error,
+input.error,
+.wrap.error {
+  border-color: red;
+}
