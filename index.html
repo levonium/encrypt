@@ -1,59 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title>Encrypt and Decrypt Text Content</title>
-	<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <title>Simple and fast encryption and decryption</title>
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-	<link rel="stylesheet" href="app.css">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <link href="https://fonts.bunny.net/css?family=albert-sans:400,700" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+
+	<link rel="shortcut icon" href="/assets/icons/icon-152.png" type="image/x-icon">
+	<link rel="apple-touch-icon" href="/assets/icons/icon-152.png">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-title" content="Fast and simple text and file encryption and decryption app.">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<link rel="canonical" href="https://encrypt.levon.dev">
+	<meta name="description" content="Fast and simple text and file encryption and decryption app.">
+
+	<link rel="manifest" href="/manifest.json">
+	<meta name="theme-color" content="#202b38">
 </head>
+
 <body>
-	<form class="wrapper">
+    <header>
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-book-lock">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H10" />
+            <path d="M20 15v7H6.5a2.5 2.5 0 0 1 0-5H20" />
+            <rect width="8" height="5" x="12" y="6" rx="1" />
+            <path d="M18 6V4a2 2 0 1 0-4 0v2" />
+        </svg>
+        <h1>
+            Encrypt and Decrypt Text Content & Files
+        </h1>
+    </header>
 
-		<h1>Encrypt and Decrypt Text Content</h1>
+    <main class="wrapper">
+        <form id="encrypt-content" data-type="content">
 
-		<details>
-			<summary>
-				What is this?
-			</summary>
+            <label for="buttons">
+                <span>What do you want to encrypt or decrypt?</span>
+                <button data-type="content" class="has-icon selected">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-book-type">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                        <path d="M16 8V6H8v2" />
+                        <path d="M12 6v7" />
+                        <path d="M10 13h4" />
+                    </svg>
+                    Content
+                </button>
+                <button data-type="file" class="has-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-file-digit">
+                        <rect width="4" height="6" x="2" y="12" rx="2" />
+                        <path d="M14 2v6h6" />
+                        <path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4" />
+                        <path d="M10 12h2v6" />
+                        <path d="M10 18h4" />
+                    </svg>
+                    File
+                </button>
+            </label>
 
-			<div>
-				<p>
-					It's a simple script that can be used to encrypt/decrypt text contents using a passphrase,
-					all done in the browser, using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API" target="_blank">WebCrypto API</a>.
-				</p>
+            <label for="content">
+                <span>Paste your content below:</span>
 
-				<p>
-					You can find the source code <a href="https://github.com/levonium/encrypt" target="_blank">here</a>.
-				</p>
-			</div>
-		</details>
+                <textarea id="content"></textarea>
+            </label>
 
-		<label for="content">
-			<span>Content</span>
+            <label for="file">
+                <span>Upload your file here:</span>
 
-			<textarea id="content" cols="60" rows="16" class="block"></textarea>
-		</label>
+                <input type="file" id="file">
+            </label>
 
-		<label for="pass">
-			<span>Passphrase</span>
+            <label for="passphrase">
+                <span>Passphrase, use your own or generate one:</span>
 
-			<input type="text" id="pass" class="block">
-		</label>
+                <input type="text" id="passphrase">
+                <button id="generate-passphrase">Generate</button>
+            </label>
 
-		<div class="buttons">
-			<button id="Encrypt">Encrypt</button>
-			<button id="Decrypt">Decrypt</button>
-		</div>
+            <div class="actions">
+                <button id="encrypt">Encrypt</button>
+                <button id="decrypt">Decrypt</button>
+            </div>
 
-		<div id="encrypted" class="hidden wrap encrypted"></div>
-		<div id="decrypted" class="hidden wrap decrypted"></div>
-	</form>
+            <div id="encrypted" class="hidden wrap encrypted"></div>
+            <div id="decrypted" class="hidden wrap decrypted"></div>
+        </form>
+    </main>
 
-	<script src="app.js" defer></script>
+    <footer class="wrapper">
+        <span>
+            <button class="open-dialog has-icon" data-dialog="about">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-bookmark">
+                    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                </svg>
+                About
+            </button>
+
+            <button class="open-dialog has-icon" data-dialog="installer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-arrow-big-down-dash">
+                    <path d="M15 5H9" />
+                    <path d="M15 9v3h4l-7 7-7-7h4V9h6z" />
+                </svg>
+                Install
+            </button>
+            <a href="https://github.com/levonium/encrypt" class="button has-icon" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-github">
+                    <path
+                        d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                </svg>
+                GitHub
+            </a>
+        </span>
+
+        <dialog class="about">
+            <header>
+                What is this?
+            </header>
+
+            <div class="wrapper">
+                <p>
+                    It's a simple script that can be used to quickly encrypt/decrypt text contents and files using a
+                    passphrase.
+                    It is quite fast and secure, and it uses <a
+                        href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard"
+                        target="_blank">AES-256-GCM</a> encryption.
+                </p>
+
+                <p>
+                    Your content, files or passphrase are never sent to any server, everything is done in your browser
+                    locally,
+                    using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
+                        target="_blank">WebCrypto API</a>.
+                </p>
+
+                <p>
+                    You can use it to encrypt text content or files, and then send it to someone else, and they can
+                    decrypt it using the same passphrase.
+                    You can also use it to encrypt your data, upload it to any cloud storage service, then download it
+                    later and decrypt it.
+                </p>
+
+                <blockquote>
+                    Please note that only data encrypted using this script can be decrypted using it.
+                </blockquote>
+
+                <p class="align-right">
+                    <button class="close">Close</button>
+                </p>
+        </dialog>
+
+        <dialog class="installer">
+            <header>
+                Install
+            </header>
+
+            <div class="wrapper">
+                <p>
+                    This is a PWA (Progressive Web App), which means you can install it on your device and use it like a native app.
+                    It works on all modern browsers, and it's completely free.
+                </p>
+
+                <h3>iOS</h3>
+                <p>
+                    Open this website on Safari, then click on the <strong>Share</strong> button, then click on <strong>Add to Home Screen</strong>.
+                </p>
+
+                <h3>Android</h3>
+                <p>
+                    Open this website on chromium based browser such as Brave, click on the <strong>⠇</strong> icon on the bottom right corner, click <strong>Install app</strong>.
+                </p>
+
+                <h3>Linux/MacOS/Windows</h3>
+                <p>
+                    Open this website on chromium based browser such as Brave, then click on the <strong>Install App</strong> button in the address bar.
+                    Follow the onscreen instructions to install the PWA.
+                </p>
+
+                <h3>Other</h3>
+                <p>
+                    The same should work on any system, however, if it doesn't, you can always use it as a website or search for a way to install PWA on your system.
+                </p>
+
+                <p class="align-right">
+                    <button class="close">Close</button>
+                </p>
+        </dialog>
+    </footer>
+
+    <script src="assets/js/app.js" type="module"></script>
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('/service-worker.js').then(reg => console.log('[🎊 ServiceWorker registered]', reg))
+			})
+		}
+	</script>
 </body>
+
 </html>
